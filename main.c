@@ -1,13 +1,7 @@
-#include <inttypes.h>
-#include <omp.h>
-#include <stdbool.h>
 #include <stdint.h>
-#include <stdio.h>
-#include <time.h>
 
 #include "checker.h"
 #include "parser.h"
-#include "properties.h"
 #include "summary.h"
 
 int main(int argc, char *argv[]) {

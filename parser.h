@@ -1,7 +1,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <inttypes.h>
+#include <stdint.h>
 
 #define DEFAULT_MIN_SET_SIZE 1
 #define DEFAULT_MAX_SET_SIZE 5

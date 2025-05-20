@@ -1,10 +1,12 @@
+#include "checker.h"
+
 #include <stdint.h>
 #include <time.h>
 
 #include "properties.h"
 #include "summary.h"
 
-void check_relations(uint8_t set_size, uint64_t count[],
+void check_relations(uint8_t set_size, uint64_t count[NUMBER_OF_PROPERTIES],
                      uint64_t total_relations) {
     for (uint64_t relation = 0; relation < total_relations; relation++)
         for (uint8_t i = 0; i < NUMBER_OF_PROPERTIES; i++)
