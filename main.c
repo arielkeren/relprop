@@ -5,11 +5,9 @@
 #include <stdio.h>
 #include <time.h>
 
+#include "parser.h"
 #include "properties.h"
 #include "summary.h"
-
-#define MIN_SET_SIZE 1
-#define MAX_SET_SIZE 5
 
 void check_relations(uint8_t set_size, uint64_t count[NUMBER_OF_PROPERTIES],
                      uint64_t total_relations) {
@@ -18,10 +16,14 @@ void check_relations(uint8_t set_size, uint64_t count[NUMBER_OF_PROPERTIES],
             count[i] += property_functions[i](relation, set_size);
 }
 
-int main() {
+int main(int argc, char *argv[]) {
     write_csv_header("results.csv");
 
-    for (uint8_t set_size = MIN_SET_SIZE; set_size <= MAX_SET_SIZE;
+    uint8_t min_set_size;
+    uint8_t max_set_size;
+    get_set_size(argc, argv, &min_set_size, &max_set_size);
+
+    for (uint8_t set_size = min_set_size; set_size <= max_set_size;
          set_size++) {
         uint64_t total_relations = 1 << (set_size * set_size);
         uint64_t count[NUMBER_OF_PROPERTIES] = {0};
