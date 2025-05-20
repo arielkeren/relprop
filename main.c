@@ -6,6 +6,7 @@
 #include <time.h>
 
 #include "properties.h"
+#include "summary.h"
 
 #define MIN_SET_SIZE 1
 #define MAX_SET_SIZE 5
@@ -17,22 +18,9 @@ void check_relations(uint8_t set_size, uint64_t count[NUMBER_OF_PROPERTIES],
             count[i] += property_functions[i](relation, set_size);
 }
 
-void print_results(uint8_t set_size, uint64_t count[NUMBER_OF_PROPERTIES],
-                   uint64_t total_relations, double elapsed) {
-    printf("-------------------\n");
-    printf("Set size: %" PRIu8 "\n", set_size);
-    printf("Total relations: %" PRIu64 "\n", total_relations);
-    printf("Time to check: %.3f seconds\n\n", elapsed);
-
-    for (uint8_t i = 0; i < NUMBER_OF_PROPERTIES; i++) {
-        printf("%s\n", property_names[i]);
-        printf("Total: %" PRIu64 "\n", count[i]);
-        printf("Percentage: %.3f%%\n\n",
-               ((float)count[i] / total_relations) * 100);
-    }
-}
-
 int main() {
+    write_csv_header("results.csv");
+
     for (uint8_t set_size = MIN_SET_SIZE; set_size <= MAX_SET_SIZE;
          set_size++) {
         uint64_t total_relations = 1 << (set_size * set_size);
@@ -46,6 +34,8 @@ int main() {
         float elapsed = (float)(end - start) / CLOCKS_PER_SEC;
 
         print_results(set_size, count, total_relations, elapsed);
+        append_results_to_csv("results.csv", set_size, count, total_relations,
+                              elapsed);
     }
 
     return 0;
