@@ -4,26 +4,41 @@
 #include <stdint.h>
 
 bool (*const property_functions[NUMBER_OF_PROPERTIES])(uint8_t[], uint8_t) = {
-    antisymmetry,      antitransitivity,
-    asymmetry,         coreflexivity,
-    density,           irreflexivity,
-    left_euclidean,    left_quasi_reflexivity,
-    quasi_reflexivity, reflexivity,
-    right_euclidean,   right_quasi_reflexivity,
-    strict_density,    symmetry,
-    totality,          transitivity,
+    antisymmetry,
+    antitransitivity,
+    asymmetry,
+    coreflexivity,
+    density,
+    irreflexivity,
+    left_euclideanness,
+    left_quasi_reflexivity,
+    quasi_reflexivity,
+    reflexivity,
+    right_euclideanness,
+    right_quasi_reflexivity,
+    strict_density,
+    symmetry,
+    totality,
+    transitivity,
     trichotomy};
 
-const char *property_names[NUMBER_OF_PROPERTIES] = {
-    "Antisymmetry",     "Antitransitivity",
-    "Asymmetry",        "Coreflexivity",
-    "Density",          "Irreflexivity",
-    "LeftEuclidean",    "LeftQuasiReflexivity",
-    "QuasiReflexivity", "Reflexivity",
-    "RightEuclidean",   "RightQuasiReflexivity",
-    "StrictDensity",    "Symmetry",
-    "Totality",         "Transitivity",
-    "Trichotomy"};
+const char *property_names[NUMBER_OF_PROPERTIES] = {"Antisymmetry",
+                                                    "Antitransitivity",
+                                                    "Asymmetry",
+                                                    "Coreflexivity",
+                                                    "Density",
+                                                    "Irreflexivity",
+                                                    "LeftEuclideanness",
+                                                    "LeftQuasiReflexivity",
+                                                    "QuasiReflexivity",
+                                                    "Reflexivity",
+                                                    "RightEuclideanness",
+                                                    "RightQuasiReflexivity",
+                                                    "StrictDensity",
+                                                    "Symmetry",
+                                                    "Totality",
+                                                    "Transitivity",
+                                                    "Trichotomy"};
 
 bool antisymmetry(uint8_t relation[], uint8_t set_size) {
     for (uint8_t i = 0; i < set_size; i++)
@@ -89,7 +104,7 @@ bool irreflexivity(uint8_t relation[], uint8_t set_size) {
     return true;
 }
 
-bool left_euclidean(uint8_t relation[], uint8_t set_size) {
+bool left_euclideanness(uint8_t relation[], uint8_t set_size) {
     for (uint8_t i = 0; i < set_size; i++)
         for (uint8_t j = 0; j < set_size; j++)
             for (uint8_t k = 0; k < set_size; k++)
@@ -126,7 +141,7 @@ bool reflexivity(uint8_t relation[], uint8_t set_size) {
     return true;
 }
 
-bool right_euclidean(uint8_t relation[], uint8_t set_size) {
+bool right_euclideanness(uint8_t relation[], uint8_t set_size) {
     for (uint8_t i = 0; i < set_size; i++)
         for (uint8_t j = 0; j < set_size; j++)
             for (uint8_t k = 0; k < set_size; k++)
