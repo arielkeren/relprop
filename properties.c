@@ -12,14 +12,10 @@ const char *property_names[NUMBER_OF_PROPERTIES] = {
     "Irreflexivity", "Reflexivity",      "Symmetry",
     "Totality",      "Transitivity",     "Trichotomy"};
 
-bool transitivity(uint8_t relation[], uint8_t set_size) {
-    for (int i = 0; i < set_size; i++) {
-        if (!relation[i]) continue;
-
-        for (int j = 0; j < set_size; j++)
-            if ((GET(relation, i, j)) && (relation[j] & ~relation[i]))
-                return false;
-    }
+bool antisymmetry(uint8_t relation[], uint8_t set_size) {
+    for (uint8_t i = 0; i < set_size; i++)
+        for (uint8_t j = i + 1; j < set_size; j++)
+            if (GET(relation, i, j) && GET(relation, j, i)) return false;
 
     return true;
 }
@@ -36,9 +32,13 @@ bool antitransitivity(uint8_t relation[], uint8_t set_size) {
     return true;
 }
 
-bool reflexivity(uint8_t relation[], uint8_t set_size) {
-    for (uint8_t i = 0; i < set_size; i++)
-        if (!GET(relation, i, i)) return false;
+bool asymmetry(uint8_t relation[], uint8_t set_size) {
+    for (uint8_t i = 0; i < set_size; i++) {
+        if (GET(relation, i, i)) return false;
+
+        for (uint8_t j = i + 1; j < set_size; j++)
+            if (GET(relation, i, j) && GET(relation, j, i)) return false;
+    }
 
     return true;
 }
@@ -46,6 +46,13 @@ bool reflexivity(uint8_t relation[], uint8_t set_size) {
 bool irreflexivity(uint8_t relation[], uint8_t set_size) {
     for (uint8_t i = 0; i < set_size; i++)
         if (GET(relation, i, i)) return false;
+
+    return true;
+}
+
+bool reflexivity(uint8_t relation[], uint8_t set_size) {
+    for (uint8_t i = 0; i < set_size; i++)
+        if (!GET(relation, i, i)) return false;
 
     return true;
 }
@@ -58,31 +65,24 @@ bool symmetry(uint8_t relation[], uint8_t set_size) {
     return true;
 }
 
-bool asymmetry(uint8_t relation[], uint8_t set_size) {
-    for (uint8_t i = 0; i < set_size; i++) {
-        if (GET(relation, i, i)) return false;
-
-        for (uint8_t j = i + 1; j < set_size; j++)
-            if (GET(relation, i, j) && GET(relation, j, i)) return false;
-    }
-
-    return true;
-}
-
-bool antisymmetry(uint8_t relation[], uint8_t set_size) {
-    for (uint8_t i = 0; i < set_size; i++)
-        for (uint8_t j = i + 1; j < set_size; j++)
-            if (GET(relation, i, j) && GET(relation, j, i)) return false;
-
-    return true;
-}
-
 bool totality(uint8_t relation[], uint8_t set_size) {
     for (uint8_t i = 0; i < set_size; i++) {
         if (!GET(relation, i, i)) return false;
 
         for (uint8_t j = i + 1; j < set_size; j++)
             if (!(GET(relation, i, j) | GET(relation, j, i))) return false;
+    }
+
+    return true;
+}
+
+bool transitivity(uint8_t relation[], uint8_t set_size) {
+    for (int i = 0; i < set_size; i++) {
+        if (!relation[i]) continue;
+
+        for (int j = 0; j < set_size; j++)
+            if ((GET(relation, i, j)) && (relation[j] & ~relation[i]))
+                return false;
     }
 
     return true;

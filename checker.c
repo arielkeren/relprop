@@ -34,7 +34,7 @@ void start_checking(const char filename[], uint8_t min_set_size,
                     uint8_t max_set_size) {
     for (uint8_t set_size = min_set_size; set_size <= max_set_size;
          set_size++) {
-        uint64_t total_relations = 1 << (set_size * set_size);
+        uint64_t total_relations = 1ULL << (set_size * set_size);
         uint64_t count[NUMBER_OF_PROPERTIES] = {0};
 
         clock_t start = clock();
