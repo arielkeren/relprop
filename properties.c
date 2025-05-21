@@ -4,17 +4,25 @@
 #include <stdint.h>
 
 bool (*const property_functions[NUMBER_OF_PROPERTIES])(uint8_t[], uint8_t) = {
-    antisymmetry,      antitransitivity, asymmetry,
-    coreflexivity,     irreflexivity,    left_quasi_reflexivity,
-    quasi_reflexivity, reflexivity,      right_quasi_reflexivity,
-    symmetry,          totality,         transitivity,
+    antisymmetry,      antitransitivity,
+    asymmetry,         coreflexivity,
+    density,           irreflexivity,
+    left_euclidean,    left_quasi_reflexivity,
+    quasi_reflexivity, reflexivity,
+    right_euclidean,   right_quasi_reflexivity,
+    strict_density,    symmetry,
+    totality,          transitivity,
     trichotomy};
 
 const char *property_names[NUMBER_OF_PROPERTIES] = {
-    "Antisymmetry",     "Antitransitivity", "Asymmetry",
-    "Coreflexivity",    "Irreflexivity",    "LeftQuasiReflexivity",
-    "QuasiReflexivity", "Reflexivity",      "RightQuasiReflexivity",
-    "Symmetry",         "Totality",         "Transitivity",
+    "Antisymmetry",     "Antitransitivity",
+    "Asymmetry",        "Coreflexivity",
+    "Density",          "Irreflexivity",
+    "LeftEuclidean",    "LeftQuasiReflexivity",
+    "QuasiReflexivity", "Reflexivity",
+    "RightEuclidean",   "RightQuasiReflexivity",
+    "StrictDensity",    "Symmetry",
+    "Totality",         "Transitivity",
     "Trichotomy"};
 
 bool antisymmetry(uint8_t relation[], uint8_t set_size) {
@@ -55,9 +63,39 @@ bool coreflexivity(uint8_t relation[], uint8_t set_size) {
     return true;
 }
 
+bool density(uint8_t relation[], uint8_t set_size) {
+    for (uint8_t i = 0; i < set_size; i++)
+        for (uint8_t j = 0; j < set_size; j++)
+            if (GET(relation, i, j)) {
+                bool found = false;
+
+                for (uint8_t k = 0; k < set_size; k++) {
+                    if (GET(relation, i, k) && GET(relation, k, j)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) return false;
+            }
+
+    return true;
+}
+
 bool irreflexivity(uint8_t relation[], uint8_t set_size) {
     for (uint8_t i = 0; i < set_size; i++)
         if (GET(relation, i, i)) return false;
+
+    return true;
+}
+
+bool left_euclidean(uint8_t relation[], uint8_t set_size) {
+    for (uint8_t i = 0; i < set_size; i++)
+        for (uint8_t j = 0; j < set_size; j++)
+            for (uint8_t k = 0; k < set_size; k++)
+                if (GET(relation, j, i) && GET(relation, k, i) &&
+                    !GET(relation, j, k))
+                    return false;
 
     return true;
 }
@@ -88,11 +126,43 @@ bool reflexivity(uint8_t relation[], uint8_t set_size) {
     return true;
 }
 
+bool right_euclidean(uint8_t relation[], uint8_t set_size) {
+    for (uint8_t i = 0; i < set_size; i++)
+        for (uint8_t j = 0; j < set_size; j++)
+            for (uint8_t k = 0; k < set_size; k++)
+                if (GET(relation, i, j) && GET(relation, i, k) &&
+                    !GET(relation, j, k))
+                    return false;
+
+    return true;
+}
+
 bool right_quasi_reflexivity(uint8_t relation[], uint8_t set_size) {
     for (uint8_t i = 0; i < set_size; i++)
         for (uint8_t j = 0; j < set_size; j++)
             if (i != j && GET(relation, i, j) && !GET(relation, j, j))
                 return false;
+
+    return true;
+}
+
+bool strict_density(uint8_t relation[], uint8_t set_size) {
+    for (uint8_t i = 0; i < set_size; i++)
+        for (uint8_t j = 0; j < set_size; j++) {
+            if (i == j || !GET(relation, i, j)) continue;
+
+            bool found = false;
+
+            for (uint8_t k = 0; k < set_size; k++) {
+                if (k == i || k == j) continue;
+                if (GET(relation, i, k) && GET(relation, k, j)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) return false;
+        }
 
     return true;
 }
