@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define NUMBER_OF_PROPERTIES 9
+#define NUMBER_OF_PROPERTIES 13
 
 #define GET(relation, row, col) (((relation[row]) >> (col)) & 1)
 
@@ -15,8 +15,12 @@ extern const char *property_names[NUMBER_OF_PROPERTIES];
 bool antisymmetry(uint8_t relation[], uint8_t set_size);
 bool antitransitivity(uint8_t relation[], uint8_t set_size);
 bool asymmetry(uint8_t relation[], uint8_t set_size);
+bool coreflexivity(uint8_t relation[], uint8_t set_size);
 bool irreflexivity(uint8_t relation[], uint8_t set_size);
+bool left_quasi_reflexivity(uint8_t relation[], uint8_t set_size);
+bool quasi_reflexivity(uint8_t relation[], uint8_t set_size);
 bool reflexivity(uint8_t relation[], uint8_t set_size);
+bool right_quasi_reflexivity(uint8_t relation[], uint8_t set_size);
 bool symmetry(uint8_t relation[], uint8_t set_size);
 bool totality(uint8_t relation[], uint8_t set_size);
 bool transitivity(uint8_t relation[], uint8_t set_size);
