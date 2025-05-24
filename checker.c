@@ -8,9 +8,7 @@
 #include "summary.h"
 
 void check_relations(uint8_t set_size, uint64_t count[NUMBER_OF_PROPERTIES]) {
-    uint8_t relation[8];
-
-    for (uint8_t i = 0; i < set_size; i++) relation[i] = 0;
+    uint8_t relation[8] = {0};
 
     uint8_t max_row_value = (1 << set_size);
 
