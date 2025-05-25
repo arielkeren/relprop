@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -O3 -march=native
+CFLAGS = -Wall -Wextra -O3 -march=native -fopenmp
 SRC = $(wildcard *.c)
 OBJ = $(SRC:.c=.o)
 TARGET = relations
