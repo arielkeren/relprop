@@ -18,10 +18,13 @@ void check_relations(uint8_t set_size, uint64_t count[NUMBER_OF_PROPERTIES]) {
 
 #pragma omp for schedule(static)
         for (uint64_t idx = 0; idx < total; idx++) {
-            for (uint8_t i = 0, val = idx; i < set_size; i++) {
+            uint64_t val = idx;
+
+            for (uint8_t i = 0; i < set_size; i++) {
                 relation[i] = val & ((1 << set_size) - 1);
                 val >>= set_size;
             }
+
             for (uint8_t i = 0; i < NUMBER_OF_PROPERTIES; i++)
                 thread_counts[i] += property_functions[i](relation, set_size);
         }

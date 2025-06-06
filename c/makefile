@@ -13,6 +13,6 @@ $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	del /Q *.o $(TARGET).exe 2>NUL || rm -f *.o $(TARGET)
+	del /Q *.o $(TARGET).exe results.csv 2>NUL || rm -f *.o $(TARGET) results.csv
 
 .PHONY: all clean

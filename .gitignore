@@ -1,3 +1,6 @@
-.vscode
 *.o
 *.exe
+*.pdb
+.vscode
+target
+*/results.csv
