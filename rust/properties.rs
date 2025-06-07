@@ -19,14 +19,16 @@ pub const PROPERTY_FUNCTIONS: [fn([u8; crate::constants::MAX_SET_SIZE], u8) -> b
     trichotomy,
 ];
 
-fn get(relation: [u8; crate::constants::MAX_SET_SIZE], row: u8, col: u8) -> bool {
-    (relation[row as usize] >> col) & 1 == 1
+macro_rules! get {
+    ($relation:expr, $row:expr, $col:expr) => {
+        ($relation[$row as usize] >> $col) & 1 == 1
+    };
 }
 
 fn antisymmetry(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) -> bool {
     for i in 0..set_size {
         for j in i + 1..set_size {
-            if get(relation, i, j) && get(relation, j, i) {
+            if get!(relation, i, j) && get!(relation, j, i) {
                 return false;
             }
         }
@@ -42,7 +44,7 @@ fn antitransitivity(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8
         }
 
         for j in 0..set_size {
-            if get(relation, i, j) && (relation[i as usize] & relation[j as usize] != 0) {
+            if get!(relation, i, j) && (relation[i as usize] & relation[j as usize] != 0) {
                 return false;
             }
         }
@@ -53,12 +55,12 @@ fn antitransitivity(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8
 
 fn asymmetry(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) -> bool {
     for i in 0..set_size {
-        if get(relation, i, i) {
+        if get!(relation, i, i) {
             return false;
         }
 
         for j in i + 1..set_size {
-            if get(relation, i, j) && get(relation, j, i) {
+            if get!(relation, i, j) && get!(relation, j, i) {
                 return false;
             }
         }
@@ -80,14 +82,14 @@ fn coreflexivity(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) -
 fn density(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) -> bool {
     for i in 0..set_size {
         for j in 0..set_size {
-            if !get(relation, i, j) {
+            if !get!(relation, i, j) {
                 continue;
             }
 
             let mut found = false;
 
             for k in 0..set_size {
-                if get(relation, i, k) && get(relation, k, j) {
+                if get!(relation, i, k) && get!(relation, k, j) {
                     found = true;
                     break;
                 }
@@ -104,7 +106,7 @@ fn density(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) -> bool
 
 fn irreflexivity(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) -> bool {
     for i in 0..set_size {
-        if get(relation, i, i) {
+        if get!(relation, i, i) {
             return false;
         }
     }
@@ -116,7 +118,7 @@ fn left_euclideanness(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: 
     for i in 0..set_size {
         for j in 0..set_size {
             for k in 0..set_size {
-                if get(relation, j, i) && get(relation, k, j) && !get(relation, k, i) {
+                if get!(relation, j, i) && get!(relation, k, j) && !get!(relation, k, i) {
                     return false;
                 }
             }
@@ -129,7 +131,7 @@ fn left_euclideanness(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: 
 fn left_quasi_reflexivity(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) -> bool {
     for i in 0..set_size {
         for j in 0..set_size {
-            if i != j && get(relation, i, j) && !get(relation, i, i) {
+            if i != j && get!(relation, i, j) && !get!(relation, i, i) {
                 return false;
             }
         }
@@ -141,7 +143,7 @@ fn left_quasi_reflexivity(relation: [u8; crate::constants::MAX_SET_SIZE], set_si
 fn quasi_reflexivity(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) -> bool {
     for i in 0..set_size {
         for j in 0..set_size {
-            if i != j && get(relation, i, j) && !(get(relation, i, i) && get(relation, j, j)) {
+            if i != j && get!(relation, i, j) && !(get!(relation, i, i) && get!(relation, j, j)) {
                 return false;
             }
         }
@@ -152,7 +154,7 @@ fn quasi_reflexivity(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u
 
 fn reflexivity(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) -> bool {
     for i in 0..set_size {
-        if !get(relation, i, i) {
+        if !get!(relation, i, i) {
             return false;
         }
     }
@@ -164,7 +166,7 @@ fn right_euclideanness(relation: [u8; crate::constants::MAX_SET_SIZE], set_size:
     for i in 0..set_size {
         for j in 0..set_size {
             for k in 0..set_size {
-                if get(relation, i, j) && get(relation, i, k) && !get(relation, j, k) {
+                if get!(relation, i, j) && get!(relation, i, k) && !get!(relation, j, k) {
                     return false;
                 }
             }
@@ -177,7 +179,7 @@ fn right_euclideanness(relation: [u8; crate::constants::MAX_SET_SIZE], set_size:
 fn right_quasi_reflexivity(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) -> bool {
     for i in 0..set_size {
         for j in 0..set_size {
-            if i != j && get(relation, i, j) && !get(relation, j, j) {
+            if i != j && get!(relation, i, j) && !get!(relation, j, j) {
                 return false;
             }
         }
@@ -189,7 +191,7 @@ fn right_quasi_reflexivity(relation: [u8; crate::constants::MAX_SET_SIZE], set_s
 fn strict_density(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) -> bool {
     for i in 0..set_size {
         for j in 0..set_size {
-            if i == j || !get(relation, i, j) {
+            if i == j || !get!(relation, i, j) {
                 continue;
             }
 
@@ -200,7 +202,7 @@ fn strict_density(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) 
                     continue;
                 }
 
-                if get(relation, i, k) && get(relation, k, j) {
+                if get!(relation, i, k) && get!(relation, k, j) {
                     found = true;
                     break;
                 }
@@ -218,7 +220,7 @@ fn strict_density(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) 
 fn symmetry(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) -> bool {
     for i in 0..set_size {
         for j in i + 1..set_size {
-            if get(relation, i, j) != get(relation, j, i) {
+            if get!(relation, i, j) != get!(relation, j, i) {
                 return false;
             }
         }
@@ -229,12 +231,12 @@ fn symmetry(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) -> boo
 
 fn totality(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) -> bool {
     for i in 0..set_size {
-        if !get(relation, i, i) {
+        if !get!(relation, i, i) {
             return false;
         }
 
         for j in i + 1..set_size {
-            if !(get(relation, i, j) || get(relation, j, i)) {
+            if !(get!(relation, i, j) || get!(relation, j, i)) {
                 return false;
             }
         }
@@ -250,7 +252,7 @@ fn transitivity(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) ->
         }
 
         for j in 0..set_size {
-            if get(relation, i, j) && (relation[j as usize] & !relation[i as usize] != 0) {
+            if get!(relation, i, j) && (relation[j as usize] & !relation[i as usize] != 0) {
                 return false;
             }
         }
@@ -262,7 +264,7 @@ fn transitivity(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) ->
 fn trichotomy(relation: [u8; crate::constants::MAX_SET_SIZE], set_size: u8) -> bool {
     for i in 0..set_size {
         for j in i + 1..set_size {
-            if !(get(relation, i, j) || get(relation, j, i)) {
+            if !(get!(relation, i, j) || get!(relation, j, i)) {
                 return false;
             }
         }
