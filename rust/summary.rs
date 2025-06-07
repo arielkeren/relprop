@@ -15,7 +15,7 @@ pub fn write_csv_header(filename: &str) {
 
 pub fn append_results_to_csv(
     filename: &str,
-    set_size: u8,
+    set_size: usize,
     count: [u64; crate::constants::NUMBER_OF_PROPERTIES],
     total_relations: u64,
     elapsed: f64,
@@ -39,7 +39,7 @@ pub fn append_results_to_csv(
 }
 
 pub fn print_results(
-    set_size: u8,
+    set_size: usize,
     count: [u64; crate::constants::NUMBER_OF_PROPERTIES],
     total_relations: u64,
     elapsed: f64,
