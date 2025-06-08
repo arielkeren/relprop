@@ -5,6 +5,25 @@
 
 #include "constants.h"
 
+bool (*const PROPERTY_FUNCTIONS[NUMBER_OF_PROPERTIES])(uint8_t[], uint8_t) = {
+    antisymmetry,
+    antitransitivity,
+    asymmetry,
+    coreflexivity,
+    density,
+    irreflexivity,
+    left_euclideanness,
+    left_quasi_reflexivity,
+    quasi_reflexivity,
+    reflexivity,
+    right_euclideanness,
+    right_quasi_reflexivity,
+    strict_density,
+    symmetry,
+    totality,
+    transitivity,
+    trichotomy};
+
 bool antisymmetry(uint8_t relation[MAX_SET_SIZE], uint8_t set_size) {
     for (uint8_t i = 0; i < set_size; i++)
         for (uint8_t j = i + 1; j < set_size; j++)

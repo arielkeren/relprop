@@ -10,7 +10,5 @@
 #define NUMBER_OF_PROPERTIES 17
 
 extern const char *PROPERTY_NAMES[NUMBER_OF_PROPERTIES];
-extern bool (*const PROPERTY_FUNCTIONS[NUMBER_OF_PROPERTIES])(uint8_t[],
-                                                              uint8_t);
 
 #endif

@@ -5,6 +5,7 @@
 #include <time.h>
 
 #include "constants.h"
+#include "properties.h"
 #include "summary.h"
 
 void start_checking(const char filename[], uint8_t min_set_size,

@@ -8,6 +8,9 @@
 
 #define GET(relation, row, col) (((relation[row]) >> (col)) & 1)
 
+extern bool (*const PROPERTY_FUNCTIONS[NUMBER_OF_PROPERTIES])(uint8_t[],
+                                                              uint8_t);
+
 bool antisymmetry(uint8_t relation[MAX_SET_SIZE], uint8_t set_size);
 bool antitransitivity(uint8_t relation[MAX_SET_SIZE], uint8_t set_size);
 bool asymmetry(uint8_t relation[MAX_SET_SIZE], uint8_t set_size);
