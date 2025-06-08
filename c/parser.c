@@ -1,17 +1,20 @@
 #include "parser.h"
 
 #include <errno.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-uint8_t parse_uint8(const char *arg) {
+#include "constants.h"
+
+uint8_t parse_uint8(const char arg[]) {
     errno = 0;
     char *end;
     unsigned long val = strtoul(arg, &end, 10);
 
     if (errno != 0 || *end != '\0' || val > UINT8_MAX) {
-        fprintf(stderr, "Invalid input for uint8_t: '%s'\n", arg);
+        fprintf(stderr, "Invalid set size value: '%s'\n", arg);
         exit(1);
     }
 
@@ -37,8 +40,15 @@ void get_set_size(int argc, char *argv[], uint8_t *min_size,
         }
     }
 
-    if (*min_size < 1 || *max_size < *min_size) {
-        fprintf(stderr, "Invalid set size range: min = %d, max = %d\n",
+    if (*max_size > MAX_SET_SIZE) {
+        fprintf(stderr, "Maximum set size cannot exceed %d\n", MAX_SET_SIZE);
+        exit(1);
+    }
+
+    if (*min_size > *max_size) {
+        fprintf(stderr,
+                "The minimum set size, %d, cannot be bigger than the maximum "
+                "set size, %d\n",
                 *min_size, *max_size);
         exit(1);
     }

@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "properties.h"
+#include "constants.h"
 
 void write_csv_header(const char filename[]) {
     FILE* file = fopen(filename, "w");
@@ -17,7 +17,7 @@ void write_csv_header(const char filename[]) {
     fprintf(file, "Set,Total,Time");
 
     for (uint8_t i = 0; i < NUMBER_OF_PROPERTIES; i++)
-        fprintf(file, ",%s_Count,%s_Pct", property_names[i], property_names[i]);
+        fprintf(file, ",%s_Count,%s_Pct", PROPERTY_NAMES[i], PROPERTY_NAMES[i]);
 
     fprintf(file, "\n");
     fclose(file);
@@ -53,7 +53,7 @@ void print_results(uint8_t set_size, uint64_t count[NUMBER_OF_PROPERTIES],
     printf("Time to check: %.3f seconds\n\n", elapsed);
 
     for (uint8_t i = 0; i < NUMBER_OF_PROPERTIES; i++) {
-        printf("%s\n", property_names[i]);
+        printf("%s\n", PROPERTY_NAMES[i]);
         printf("Total: %" PRIu64 "\n", count[i]);
         printf("Percentage: %.3f%%\n\n",
                ((float)count[i] / total_relations) * 100);

@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#include "properties.h"
+#include "constants.h"
 
 void write_csv_header(const char filename[]);
 
