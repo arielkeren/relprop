@@ -1,11 +1,15 @@
 use std::io::Write;
 
-pub fn write_csv_header(filename: &str) {
+pub fn write_csv_header(filename: &str, properties: &Vec<usize>) {
     let mut file = std::fs::File::create(filename).expect("Failed to open file for writing header");
 
     let mut header = "Set,Total,Time".to_string();
-    for property_name in crate::constants::PROPERTY_NAMES.iter() {
-        header.push_str(&format!(",{}_Count,{}_Pct", property_name, property_name));
+    for &property in properties.iter() {
+        header.push_str(&format!(
+            ",{}_Count,{}_Pct",
+            crate::constants::CAPITALIZED_PROPERTY_NAMES[property],
+            crate::constants::CAPITALIZED_PROPERTY_NAMES[property]
+        ));
     }
     header.push('\n');
 
@@ -16,7 +20,7 @@ pub fn write_csv_header(filename: &str) {
 pub fn append_results_to_csv(
     filename: &str,
     set_size: usize,
-    count: [u64; crate::constants::NUMBER_OF_PROPERTIES],
+    count: Vec<u64>,
     total_relations: u64,
     elapsed: f64,
 ) {
@@ -40,19 +44,18 @@ pub fn append_results_to_csv(
 
 pub fn print_results(
     set_size: usize,
-    count: [u64; crate::constants::NUMBER_OF_PROPERTIES],
+    count: &Vec<u64>,
     total_relations: u64,
     elapsed: f64,
+    properties: &Vec<usize>,
 ) {
     println!("-------------------");
     println!("Set size: {}", set_size);
     println!("Total relations: {}", total_relations);
     println!("Time to check: {} seconds", elapsed);
 
-    for (property_name, &property_count) in
-        crate::constants::PROPERTY_NAMES.iter().zip(count.iter())
-    {
-        println!("{}", property_name);
+    for (&property, &property_count) in properties.iter().zip(count.iter()) {
+        println!("{}", crate::constants::CAPITALIZED_PROPERTY_NAMES[property]);
         println!("Total: {}", property_count);
         println!(
             "Percentage: {}%\n",
