@@ -12,12 +12,22 @@ pub fn start_checking(
         let count = check_relations(set_size, total_relations, &properties);
         let elapsed = start.elapsed().as_secs_f64();
 
-        crate::output::print_results(set_size, &count, total_relations, elapsed, &properties);
-        crate::output::append_results_to_csv(filename, set_size, count, total_relations, elapsed);
+        crate::output::append_results_to_csv(
+            filename,
+            set_size,
+            count,
+            properties.len(),
+            total_relations,
+            elapsed,
+        );
     }
 }
 
-pub fn check_relations(set_size: usize, total_relations: u64, properties: &Vec<usize>) -> Vec<u64> {
+fn check_relations(
+    set_size: usize,
+    total_relations: u64,
+    properties: &Vec<usize>,
+) -> [u64; crate::constants::NUMBER_OF_PROPERTIES] {
     (0..total_relations)
         .into_par_iter()
         .map(|i| {
@@ -29,7 +39,7 @@ pub fn check_relations(set_size: usize, total_relations: u64, properties: &Vec<u
                 val >>= set_size;
             }
 
-            let mut local = vec![0u64; properties.len()];
+            let mut local = [0u64; crate::constants::NUMBER_OF_PROPERTIES];
 
             for (index, &property) in properties.iter().enumerate() {
                 local[index] =
@@ -39,7 +49,7 @@ pub fn check_relations(set_size: usize, total_relations: u64, properties: &Vec<u
             local
         })
         .reduce(
-            || vec![0u64; properties.len()],
+            || [0u64; crate::constants::NUMBER_OF_PROPERTIES],
             |mut a, b| {
                 for i in 0..properties.len() {
                     a[i] += b[i];

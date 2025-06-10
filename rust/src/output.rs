@@ -20,7 +20,8 @@ pub fn write_csv_header(filename: &str, properties: &Vec<usize>) {
 pub fn append_results_to_csv(
     filename: &str,
     set_size: usize,
-    count: Vec<u64>,
+    count: [u64; crate::constants::NUMBER_OF_PROPERTIES],
+    number_of_properties: usize,
     total_relations: u64,
     elapsed: f64,
 ) {
@@ -31,35 +32,13 @@ pub fn append_results_to_csv(
 
     let mut line = format!("{},{},{}", set_size, total_relations, elapsed);
 
-    for &property_count in count.iter() {
-        let pct = (property_count as f64 / total_relations as f64) * 100.0;
-        line.push_str(&format!(",{},{}", property_count, pct));
+    for index in 0..number_of_properties {
+        let pct = (count[index] as f64 / total_relations as f64) * 100.0;
+        line.push_str(&format!(",{},{}", count[index], pct));
     }
 
     line.push('\n');
 
     file.write_all(line.as_bytes())
         .expect("Failed to write results to CSV");
-}
-
-pub fn print_results(
-    set_size: usize,
-    count: &Vec<u64>,
-    total_relations: u64,
-    elapsed: f64,
-    properties: &Vec<usize>,
-) {
-    println!("-------------------");
-    println!("Set size: {}", set_size);
-    println!("Total relations: {}", total_relations);
-    println!("Time to check: {} seconds", elapsed);
-
-    for (&property, &property_count) in properties.iter().zip(count.iter()) {
-        println!("{}", crate::constants::CAPITALIZED_PROPERTY_NAMES[property]);
-        println!("Total: {}", property_count);
-        println!(
-            "Percentage: {}%\n",
-            (property_count as f64 / total_relations as f64) * 100.0
-        );
-    }
 }
