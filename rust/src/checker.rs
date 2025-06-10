@@ -8,6 +8,8 @@ pub fn start_checking(
     properties: PropertyVec,
 ) {
     for set_size in min_set_size..=max_set_size {
+        println!("Checking relations on set size: {}", set_size);
+
         let total_relations = 1 << (set_size * set_size);
         let start = std::time::Instant::now();
         let count = check_relations(set_size, total_relations, &properties);
