@@ -1,32 +1,47 @@
 pub fn get_input() -> (usize, usize, Vec<usize>) {
-    let mut min_set_size = crate::constants::DEFAULT_MIN_SET_SIZE;
-    let mut max_set_size = crate::constants::DEFAULT_MAX_SET_SIZE;
+    let mut min_set_size: Option<usize> = None;
+    let mut max_set_size: Option<usize> = None;
+
+    let mut is_reading_properties = false;
+    let mut has_read_properties = false;
 
     let mut args = std::env::args().skip(1);
-    let mut is_reading_properties = false;
     let mut property_indices: Vec<usize> = Vec::new();
 
     while let Some(arg) = args.next() {
         match arg.as_str() {
             "--min" | "-m" => {
+                if min_set_size.is_some() {
+                    panic!("Minimum set size specified multiple times");
+                }
+
                 is_reading_properties = false;
 
                 if let Some(val) = args.next() {
-                    min_set_size = val.parse().expect(
+                    min_set_size = Some(val.parse().expect(
                         "Invalid minimum set size - should be a natural number (0, 1, 2, ...)",
-                    );
+                    ));
                 }
             }
             "--max" | "-M" => {
+                if max_set_size.is_some() {
+                    panic!("Maximum set size specified multiple times");
+                }
+
                 is_reading_properties = false;
 
                 if let Some(val) = args.next() {
-                    max_set_size = val.parse().expect(
+                    max_set_size = Some(val.parse().expect(
                         "Invalid maximum set size - should be a natural number (0, 1, 2, ...)",
-                    );
+                    ));
                 }
             }
             "--properties" | "-p" => {
+                if has_read_properties {
+                    panic!("Properties specified multiple times");
+                }
+
+                has_read_properties = true;
                 is_reading_properties = true;
             }
             _ => {
@@ -53,11 +68,18 @@ pub fn get_input() -> (usize, usize, Vec<usize>) {
         }
     }
 
-    validate_set_size(min_set_size, max_set_size);
+    if has_read_properties && property_indices.is_empty() {
+        panic!("Flag is present, but no properties specified");
+    }
+
+    let min_size = min_set_size.unwrap_or(crate::constants::DEFAULT_MIN_SET_SIZE);
+    let max_size = max_set_size.unwrap_or(crate::constants::DEFAULT_MAX_SET_SIZE);
+
+    validate_set_size(min_size, max_size);
 
     (
-        min_set_size,
-        max_set_size,
+        min_size,
+        max_size,
         if property_indices.is_empty() {
             (0..crate::constants::PROPERTY_NAMES.len()).collect()
         } else {
