@@ -64,5 +64,9 @@ pub fn get_input() -> (usize, usize, Vec<usize>) {
         panic!("Invalid set size range - minimum set size cannot be greater than maximum set size");
     }
 
+    if property_indices.is_empty() {
+        property_indices = (0..crate::constants::PROPERTY_NAMES.len()).collect();
+    }
+
     (min_set_size, max_set_size, property_indices)
 }
