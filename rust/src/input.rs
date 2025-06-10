@@ -77,15 +77,17 @@ pub fn get_input() -> (usize, usize, Vec<usize>) {
 
     validate_set_size(min_size, max_size);
 
-    (
-        min_size,
-        max_size,
-        if property_indices.is_empty() {
-            (0..crate::constants::PROPERTY_NAMES.len()).collect()
-        } else {
-            property_indices
-        },
-    )
+    if property_indices.is_empty() {
+        return (
+            min_size,
+            max_size,
+            (0..crate::constants::PROPERTY_NAMES.len()).collect(),
+        );
+    }
+
+    property_indices.sort_unstable();
+
+    (min_size, max_size, property_indices)
 }
 
 fn validate_set_size(min_set_size: usize, max_set_size: usize) {
