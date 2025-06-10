@@ -53,6 +53,20 @@ pub fn get_input() -> (usize, usize, Vec<usize>) {
         }
     }
 
+    validate_set_size(min_set_size, max_set_size);
+
+    (
+        min_set_size,
+        max_set_size,
+        if property_indices.is_empty() {
+            (0..crate::constants::PROPERTY_NAMES.len()).collect()
+        } else {
+            property_indices
+        },
+    )
+}
+
+fn validate_set_size(min_set_size: usize, max_set_size: usize) {
     if max_set_size > crate::constants::MAX_SET_SIZE {
         panic!(
             "Invalid maximum set size - should be at most {}",
@@ -63,10 +77,4 @@ pub fn get_input() -> (usize, usize, Vec<usize>) {
     if min_set_size > max_set_size {
         panic!("Invalid set size range - minimum set size cannot be greater than maximum set size");
     }
-
-    if property_indices.is_empty() {
-        property_indices = (0..crate::constants::PROPERTY_NAMES.len()).collect();
-    }
-
-    (min_set_size, max_set_size, property_indices)
 }
