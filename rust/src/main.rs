@@ -3,6 +3,7 @@ mod constants;
 mod input;
 mod output;
 mod properties;
+mod types;
 
 fn main() {
     let filename = "results.csv";

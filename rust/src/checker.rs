@@ -1,10 +1,11 @@
+use crate::types::*;
 use rayon::prelude::*;
 
 pub fn start_checking(
     filename: &str,
     min_set_size: usize,
     max_set_size: usize,
-    properties: Vec<usize>,
+    properties: PropertyVec,
 ) {
     for set_size in min_set_size..=max_set_size {
         let total_relations = 1 << (set_size * set_size);
@@ -23,11 +24,7 @@ pub fn start_checking(
     }
 }
 
-fn check_relations(
-    set_size: usize,
-    total_relations: u64,
-    properties: &Vec<usize>,
-) -> [u64; crate::constants::NUMBER_OF_PROPERTIES] {
+fn check_relations(set_size: usize, total_relations: u64, properties: &PropertyVec) -> CountArray {
     (0..total_relations)
         .into_par_iter()
         .map(|i| {

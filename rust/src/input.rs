@@ -1,4 +1,6 @@
-pub fn get_input() -> (usize, usize, Vec<usize>) {
+use crate::types::*;
+
+pub fn get_input() -> (usize, usize, PropertyVec) {
     let mut min_set_size: Option<usize> = None;
     let mut max_set_size: Option<usize> = None;
 
@@ -6,7 +8,7 @@ pub fn get_input() -> (usize, usize, Vec<usize>) {
     let mut has_read_properties = false;
 
     let mut args = std::env::args().skip(1);
-    let mut property_indices: Vec<usize> = Vec::new();
+    let mut property_indices: PropertyVec = Vec::new();
 
     while let Some(arg) = args.next() {
         match arg.as_str() {

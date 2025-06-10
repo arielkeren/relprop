@@ -1,6 +1,7 @@
+use crate::types::*;
 use std::io::Write;
 
-pub fn write_csv_header(filename: &str, properties: &Vec<usize>) {
+pub fn write_csv_header(filename: &str, properties: &PropertyVec) {
     let mut file = std::fs::File::create(filename).expect("Failed to open file for writing header");
 
     let mut header = "Set,Total,Time".to_string();
@@ -20,7 +21,7 @@ pub fn write_csv_header(filename: &str, properties: &Vec<usize>) {
 pub fn append_results_to_csv(
     filename: &str,
     set_size: usize,
-    count: [u64; crate::constants::NUMBER_OF_PROPERTIES],
+    count: CountArray,
     number_of_properties: usize,
     total_relations: u64,
     elapsed: f64,
