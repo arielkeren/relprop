@@ -6,7 +6,8 @@
 
 #include "constants.h"
 
-#define GET(relation, row, col) (((relation[row]) >> (col)) & 1)
+#define GET(relation, row, col) (((relation[(row)]) >> (col)) & 1)
+#define GET_ROW(row_val, col) (((row_val) >> (col)) & 1)
 
 extern bool (*const PROPERTY_FUNCTIONS[NUMBER_OF_PROPERTIES])(uint8_t[],
                                                               uint8_t);

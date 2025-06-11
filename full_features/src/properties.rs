@@ -24,12 +24,18 @@ macro_rules! get {
     ($relation:expr, $row:expr, $col:expr) => {
         ($relation[$row] >> $col) & 1 == 1
     };
+
+    ($row_val:expr, $col:expr) => {
+        ($row_val >> $col) & 1 == 1
+    };
 }
 
 fn antisymmetry(relation: Relation, set_size: usize) -> bool {
     for i in 0..set_size {
+        let row = relation[i];
+
         for j in i + 1..set_size {
-            if get!(relation, i, j) && get!(relation, j, i) {
+            if get!(row, j) && get!(relation, j, i) {
                 return false;
             }
         }
@@ -40,12 +46,14 @@ fn antisymmetry(relation: Relation, set_size: usize) -> bool {
 
 fn antitransitivity(relation: Relation, set_size: usize) -> bool {
     for i in 0..set_size {
-        if relation[i] == 0 {
+        let row = relation[i];
+
+        if row == 0 {
             continue;
         }
 
         for j in 0..set_size {
-            if get!(relation, i, j) && (relation[i] & relation[j] != 0) {
+            if get!(row, j) && (row & relation[j] != 0) {
                 return false;
             }
         }
@@ -59,9 +67,13 @@ fn asymmetry(relation: Relation, set_size: usize) -> bool {
         if get!(relation, i, i) {
             return false;
         }
+    }
+
+    for i in 0..set_size {
+        let row = relation[i];
 
         for j in i + 1..set_size {
-            if get!(relation, i, j) && get!(relation, j, i) {
+            if get!(row, j) && get!(relation, j, i) {
                 return false;
             }
         }
@@ -82,15 +94,21 @@ fn coreflexivity(relation: Relation, set_size: usize) -> bool {
 
 fn density(relation: Relation, set_size: usize) -> bool {
     for i in 0..set_size {
+        let row = relation[i];
+
+        if row == 0 {
+            continue;
+        }
+
         for j in 0..set_size {
-            if !get!(relation, i, j) {
+            if !get!(row, j) {
                 continue;
             }
 
             let mut found = false;
 
             for k in 0..set_size {
-                if get!(relation, i, k) && get!(relation, k, j) {
+                if get!(row, k) && get!(relation, k, j) {
                     found = true;
                     break;
                 }
@@ -118,21 +136,24 @@ fn irreflexivity(relation: Relation, set_size: usize) -> bool {
 fn left_euclideanness(relation: Relation, set_size: usize) -> bool {
     for i in 0..set_size {
         for j in 0..set_size {
+            let row = relation[j];
+
             for k in 0..set_size {
-                if get!(relation, j, i) && get!(relation, k, j) && !get!(relation, k, i) {
+                if get!(row, i) && get!(relation, k, i) && !get!(row, k) {
                     return false;
                 }
             }
         }
     }
-
     true
 }
 
 fn left_quasi_reflexivity(relation: Relation, set_size: usize) -> bool {
     for i in 0..set_size {
+        let row = relation[i];
+
         for j in 0..set_size {
-            if i != j && get!(relation, i, j) && !get!(relation, i, i) {
+            if i != j && get!(row, j) && !get!(row, i) {
                 return false;
             }
         }
@@ -143,8 +164,10 @@ fn left_quasi_reflexivity(relation: Relation, set_size: usize) -> bool {
 
 fn quasi_reflexivity(relation: Relation, set_size: usize) -> bool {
     for i in 0..set_size {
+        let row = relation[i];
+
         for j in 0..set_size {
-            if i != j && get!(relation, i, j) && !(get!(relation, i, i) && get!(relation, j, j)) {
+            if i != j && get!(row, j) && !(get!(row, i) && get!(relation, j, j)) {
                 return false;
             }
         }
@@ -165,9 +188,13 @@ fn reflexivity(relation: Relation, set_size: usize) -> bool {
 
 fn right_euclideanness(relation: Relation, set_size: usize) -> bool {
     for i in 0..set_size {
+        let row_i = relation[i];
+
         for j in 0..set_size {
+            let row_j = relation[j];
+
             for k in 0..set_size {
-                if get!(relation, i, j) && get!(relation, i, k) && !get!(relation, j, k) {
+                if get!(row_i, j) && get!(row_i, k) && !get!(row_j, k) {
                     return false;
                 }
             }
@@ -179,8 +206,10 @@ fn right_euclideanness(relation: Relation, set_size: usize) -> bool {
 
 fn right_quasi_reflexivity(relation: Relation, set_size: usize) -> bool {
     for i in 0..set_size {
+        let row = relation[i];
+
         for j in 0..set_size {
-            if i != j && get!(relation, i, j) && !get!(relation, j, j) {
+            if i != j && get!(row, j) && !get!(relation, j, j) {
                 return false;
             }
         }
@@ -191,8 +220,14 @@ fn right_quasi_reflexivity(relation: Relation, set_size: usize) -> bool {
 
 fn strict_density(relation: Relation, set_size: usize) -> bool {
     for i in 0..set_size {
+        let row = relation[i];
+
+        if row == 0 {
+            continue;
+        }
+
         for j in 0..set_size {
-            if i == j || !get!(relation, i, j) {
+            if i == j || !get!(row, j) {
                 continue;
             }
 
@@ -203,7 +238,7 @@ fn strict_density(relation: Relation, set_size: usize) -> bool {
                     continue;
                 }
 
-                if get!(relation, i, k) && get!(relation, k, j) {
+                if get!(row, k) && get!(relation, k, j) {
                     found = true;
                     break;
                 }
@@ -220,8 +255,10 @@ fn strict_density(relation: Relation, set_size: usize) -> bool {
 
 fn symmetry(relation: Relation, set_size: usize) -> bool {
     for i in 0..set_size {
+        let row = relation[i];
+
         for j in i + 1..set_size {
-            if get!(relation, i, j) != get!(relation, j, i) {
+            if get!(row, j) != get!(relation, j, i) {
                 return false;
             }
         }
@@ -235,9 +272,13 @@ fn totality(relation: Relation, set_size: usize) -> bool {
         if !get!(relation, i, i) {
             return false;
         }
+    }
+
+    for i in 0..set_size {
+        let row = relation[i];
 
         for j in i + 1..set_size {
-            if !(get!(relation, i, j) || get!(relation, j, i)) {
+            if !(get!(row, j) || get!(relation, j, i)) {
                 return false;
             }
         }
@@ -248,12 +289,14 @@ fn totality(relation: Relation, set_size: usize) -> bool {
 
 fn transitivity(relation: Relation, set_size: usize) -> bool {
     for i in 0..set_size {
-        if relation[i] == 0 {
+        let row = relation[i];
+
+        if row == 0 {
             continue;
         }
 
         for j in 0..set_size {
-            if get!(relation, i, j) && (relation[j] & !relation[i] != 0) {
+            if get!(row, j) && (relation[j] & !row != 0) {
                 return false;
             }
         }
@@ -264,8 +307,10 @@ fn transitivity(relation: Relation, set_size: usize) -> bool {
 
 fn trichotomy(relation: Relation, set_size: usize) -> bool {
     for i in 0..set_size {
+        let row = relation[i];
+
         for j in i + 1..set_size {
-            if !(get!(relation, i, j) || get!(relation, j, i)) {
+            if !(get!(row, j) || get!(relation, j, i)) {
                 return false;
             }
         }
