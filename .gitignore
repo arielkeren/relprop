@@ -2,5 +2,6 @@
 *.exe
 *.pdb
 .vscode
+obj
 target
 */results.csv
