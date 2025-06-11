@@ -13,10 +13,12 @@ $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	if not exist $(OBJ_DIR) mkdir $(OBJ_DIR)
+	@if not exist $(OBJ_DIR) mkdir $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	del /Q $(SRC_DIR)\*.o $(TARGET).exe results.csv 2>NUL || rm -f $(SRC_DIR)/*.o $(TARGET) results.csv
+	@if exist $(OBJ_DIR) rmdir /S /Q $(OBJ_DIR)
+	@if exist $(TARGET).exe del /Q $(TARGET).exe
+	@if exist results.csv del /Q results.csv
 
 .PHONY: all clean
