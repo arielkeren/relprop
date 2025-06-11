@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -O3 -march=native -fopenmp -Isrc -Iinclude
+CFLAGS = -Wall -Wextra -O3 -march=native -fopenmp -flto -Isrc -Iinclude
 SRC_DIR = src
 INC_DIR = include
 OBJ_DIR = obj
