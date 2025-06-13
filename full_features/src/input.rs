@@ -1,6 +1,27 @@
 use crate::types::*;
 
 pub fn get_input() -> (usize, usize, PropertyVec) {
+    let (min_set_size, max_set_size, mut properties) = read_args();
+
+    let min_size = min_set_size.unwrap_or(crate::constants::DEFAULT_MIN_SET_SIZE);
+    let max_size = max_set_size.unwrap_or(crate::constants::DEFAULT_MAX_SET_SIZE);
+
+    validate_set_size(min_size, max_size);
+
+    if properties.is_empty() {
+        return (
+            min_size,
+            max_size,
+            (0..crate::constants::PROPERTY_NAMES.len()).collect(),
+        );
+    }
+
+    properties.sort_unstable();
+
+    (min_size, max_size, properties)
+}
+
+fn read_args() -> (Option<usize>, Option<usize>, Vec<usize>) {
     let mut min_set_size: Option<usize> = None;
     let mut max_set_size: Option<usize> = None;
 
@@ -8,7 +29,7 @@ pub fn get_input() -> (usize, usize, PropertyVec) {
     let mut has_read_properties = false;
 
     let mut args = std::env::args().skip(1);
-    let mut property_indices: PropertyVec = Vec::new();
+    let mut properties: PropertyVec = Vec::new();
 
     while let Some(arg) = args.next() {
         match arg.as_str() {
@@ -56,7 +77,7 @@ pub fn get_input() -> (usize, usize, PropertyVec) {
                     .position(|&name| name == arg.to_lowercase())
                 {
                     Some(index) => {
-                        property_indices.push(index);
+                        properties.push(index);
                     }
                     None => {
                         panic!(
@@ -70,26 +91,11 @@ pub fn get_input() -> (usize, usize, PropertyVec) {
         }
     }
 
-    if has_read_properties && property_indices.is_empty() {
+    if has_read_properties && properties.is_empty() {
         panic!("Flag is present, but no properties specified");
     }
 
-    let min_size = min_set_size.unwrap_or(crate::constants::DEFAULT_MIN_SET_SIZE);
-    let max_size = max_set_size.unwrap_or(crate::constants::DEFAULT_MAX_SET_SIZE);
-
-    validate_set_size(min_size, max_size);
-
-    if property_indices.is_empty() {
-        return (
-            min_size,
-            max_size,
-            (0..crate::constants::PROPERTY_NAMES.len()).collect(),
-        );
-    }
-
-    property_indices.sort_unstable();
-
-    (min_size, max_size, property_indices)
+    return (min_set_size, max_set_size, properties);
 }
 
 fn validate_set_size(min_set_size: usize, max_set_size: usize) {
