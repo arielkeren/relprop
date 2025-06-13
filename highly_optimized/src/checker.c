@@ -1,7 +1,9 @@
 #include "checker.h"
 
+#include <inttypes.h>
 #include <omp.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <time.h>
 
 #include "constants.h"
@@ -12,6 +14,8 @@ void start_checking(const char filename[], uint8_t min_set_size,
                     uint8_t max_set_size) {
     for (uint8_t set_size = min_set_size; set_size <= max_set_size;
          set_size++) {
+        printf("Checking relations on set size: %" PRIu8 "\n", set_size);
+
         uint64_t total_relations = 1ULL << (set_size * set_size);
         uint64_t count[NUMBER_OF_PROPERTIES] = {0};
 
@@ -22,7 +26,6 @@ void start_checking(const char filename[], uint8_t min_set_size,
         clock_t end = clock();
         float elapsed = (float)(end - start) / CLOCKS_PER_SEC;
 
-        print_results(set_size, count, total_relations, elapsed);
         append_results_to_csv(filename, set_size, count, total_relations,
                               elapsed);
     }

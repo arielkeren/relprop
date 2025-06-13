@@ -44,18 +44,3 @@ void append_results_to_csv(const char filename[], uint8_t set_size,
     fprintf(file, "\n");
     fclose(file);
 }
-
-void print_results(uint8_t set_size, uint64_t count[NUMBER_OF_PROPERTIES],
-                   uint64_t total_relations, double elapsed) {
-    printf("-------------------\n");
-    printf("Set size: %" PRIu8 "\n", set_size);
-    printf("Total relations: %" PRIu64 "\n", total_relations);
-    printf("Time to check: %.3f seconds\n\n", elapsed);
-
-    for (uint8_t i = 0; i < NUMBER_OF_PROPERTIES; i++) {
-        printf("%s\n", PROPERTY_NAMES[i]);
-        printf("Total: %" PRIu64 "\n", count[i]);
-        printf("Percentage: %.3f%%\n\n",
-               ((float)count[i] / total_relations) * 100);
-    }
-}
