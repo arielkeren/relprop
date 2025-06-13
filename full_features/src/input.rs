@@ -76,10 +76,7 @@ fn read_args() -> (Option<usize>, Option<usize>, PropertyVec) {
                     arg_error(format!("Unknown argument: {}.", arg).as_str());
                 }
 
-                match crate::constants::PROPERTY_NAMES
-                    .iter()
-                    .position(|&name| name == arg.to_lowercase())
-                {
+                match get_property_index(&arg.to_lowercase()) {
                     Some(index) => {
                         properties.push(index);
                     }
@@ -116,6 +113,12 @@ fn validate_set_size(min_set_size: usize, max_set_size: usize) {
     }
 }
 
+fn get_property_index(property: &str) -> Option<usize> {
+    crate::constants::PROPERTY_NAMES
+        .iter()
+        .position(|&name| name == property.to_lowercase())
+}
+
 fn arg_error(error: &str) -> ! {
     let program_name = std::env::args().next().unwrap_or("program".to_string());
 
@@ -140,7 +143,7 @@ fn arg_error(error: &str) -> ! {
     );
     eprintln!(
         "Valid properties are: {}",
-        crate::constants::PROPERTY_NAMES.join(", ")
+        crate::constants::CAPITALIZED_PROPERTY_NAMES.join(", ")
     );
 
     std::process::exit(1);
