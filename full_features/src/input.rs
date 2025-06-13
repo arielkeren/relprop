@@ -35,33 +35,37 @@ fn read_args() -> (Option<usize>, Option<usize>, Vec<usize>) {
         match arg.as_str() {
             "--min" | "-m" => {
                 if min_set_size.is_some() {
-                    panic!("Minimum set size specified multiple times");
+                    arg_error("Minimum set size specified multiple times");
                 }
 
                 is_reading_properties = false;
 
                 if let Some(val) = args.next() {
-                    min_set_size = Some(val.parse().expect(
-                        "Invalid minimum set size - should be a natural number (0, 1, 2, ...)",
-                    ));
+                    min_set_size = Some(val.parse().unwrap_or_else(|_| {
+                        arg_error(
+                            "Invalid minimum set size - should be a natural number (0, 1, 2, ...)",
+                        )
+                    }));
                 }
             }
             "--max" | "-M" => {
                 if max_set_size.is_some() {
-                    panic!("Maximum set size specified multiple times");
+                    arg_error("Maximum set size specified multiple times");
                 }
 
                 is_reading_properties = false;
 
                 if let Some(val) = args.next() {
-                    max_set_size = Some(val.parse().expect(
-                        "Invalid maximum set size - should be a natural number (0, 1, 2, ...)",
-                    ));
+                    max_set_size = Some(val.parse().unwrap_or_else(|_| {
+                        arg_error(
+                            "Invalid maximum set size - should be a natural number (0, 1, 2, ...)",
+                        )
+                    }));
                 }
             }
             "--properties" | "-p" => {
                 if has_read_properties {
-                    panic!("Properties specified multiple times");
+                    arg_error("Properties specified multiple times");
                 }
 
                 has_read_properties = true;
@@ -69,7 +73,7 @@ fn read_args() -> (Option<usize>, Option<usize>, Vec<usize>) {
             }
             _ => {
                 if !is_reading_properties {
-                    panic!("Unknown argument: {}.", arg);
+                    arg_error(format!("Unknown argument: {}.", arg).as_str());
                 }
 
                 match crate::constants::PROPERTY_NAMES
@@ -80,11 +84,7 @@ fn read_args() -> (Option<usize>, Option<usize>, Vec<usize>) {
                         properties.push(index);
                     }
                     None => {
-                        panic!(
-                            "Invalid property: {} - Valid properties are: {:?}",
-                            arg,
-                            crate::constants::PROPERTY_NAMES
-                        );
+                        arg_error(format!("Invalid property: {}", arg).as_str());
                     }
                 }
             }
@@ -92,7 +92,7 @@ fn read_args() -> (Option<usize>, Option<usize>, Vec<usize>) {
     }
 
     if has_read_properties && properties.is_empty() {
-        panic!("Flag is present, but no properties specified");
+        arg_error("Flag is present, but no properties specified");
     }
 
     return (min_set_size, max_set_size, properties);
@@ -100,13 +100,46 @@ fn read_args() -> (Option<usize>, Option<usize>, Vec<usize>) {
 
 fn validate_set_size(min_set_size: usize, max_set_size: usize) {
     if max_set_size > crate::constants::MAX_SET_SIZE {
-        panic!(
-            "Invalid maximum set size - should be at most {}",
-            crate::constants::MAX_SET_SIZE
+        arg_error(
+            format!(
+                "Invalid maximum set size - should be at most {}",
+                crate::constants::MAX_SET_SIZE
+            )
+            .as_str(),
         );
     }
 
     if min_set_size > max_set_size {
-        panic!("Invalid set size range - minimum set size cannot be greater than maximum set size");
+        arg_error(
+            "Invalid set size range - minimum set size cannot be greater than maximum set size",
+        );
     }
+}
+
+fn arg_error(error: &str) -> ! {
+    let program_name = std::env::args().next().unwrap_or("program".to_string());
+
+    eprintln!("ERROR: {}", error);
+    eprintln!(
+        "Usage: {} [--min <min_size>] [--max <max_size>] [--properties <property1> <property2> ...]",
+        program_name
+    );
+    eprintln!(
+        "Short form: {} [-m <min_size>] [-M <max_size>] [-p <property1> <property2> ...]",
+        program_name
+    );
+    eprintln!(
+        "Minimum set size defaults to {}, maximum set size defaults to {}, and property list defaults to all properties",
+        crate::constants::DEFAULT_MIN_SET_SIZE,
+        crate::constants::DEFAULT_MAX_SET_SIZE,
+    );
+    eprintln!(
+        "Set sizes have to be between 0 and {}",
+        crate::constants::MAX_SET_SIZE
+    );
+    eprintln!(
+        "Valid properties are: {:?}",
+        crate::constants::PROPERTY_NAMES
+    );
+    std::process::exit(1);
 }
