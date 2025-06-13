@@ -73,7 +73,9 @@ RelProp systematically enumerates all such relations for a given \( n \), and ch
 ```sh
 cd highly_optimized
 make
-./relations -min 2 -max 5
+./relations --min 2 --max 5
+# Or
+./relations -m 2 -M 5
 ```
 
 ### **Rust Version (Full Features)**

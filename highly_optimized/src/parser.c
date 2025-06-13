@@ -27,15 +27,19 @@ void get_set_size(int argc, char *argv[], uint8_t *min_size,
     *max_size = DEFAULT_MAX_SET_SIZE;
 
     for (int i = 1; i < argc; i++) {
-        if (strcmp(argv[i], "-min") == 0 && i + 1 < argc) {
+        if ((strcmp(argv[i], "--min") == 0 || strcmp(argv[i], "-m") == 0) &&
+            i + 1 < argc) {
             *min_size = parse_uint8(argv[i + 1]);
             i++;
-        } else if (strcmp(argv[i], "-max") == 0 && i + 1 < argc) {
+        } else if ((strcmp(argv[i], "--max") == 0 ||
+                    strcmp(argv[i], "-M") == 0) &&
+                   i + 1 < argc) {
             *max_size = parse_uint8(argv[i + 1]);
             i++;
         } else {
             fprintf(stderr, "Unknown or incomplete argument: %s\n", argv[i]);
-            fprintf(stderr, "Usage: %s [-min N] [-max M]\n", argv[0]);
+            fprintf(stderr, "Usage: %s --min 2 --max 5\n", argv[0]);
+            fprintf(stderr, "Or:    %s -m 2 -M 5\n", argv[0]);
             exit(1);
         }
     }
