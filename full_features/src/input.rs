@@ -73,7 +73,7 @@ fn read_args() -> (Option<usize>, Option<usize>, PropertyVec) {
             }
             _ => {
                 if !is_reading_properties {
-                    arg_error(format!("Unknown argument: {}.", arg).as_str());
+                    arg_error(&format!("Unknown argument: {}.", arg));
                 }
 
                 match get_property_index(&arg.to_lowercase()) {
@@ -81,7 +81,7 @@ fn read_args() -> (Option<usize>, Option<usize>, PropertyVec) {
                         properties.push(index);
                     }
                     None => {
-                        arg_error(format!("Invalid property: {}", arg).as_str());
+                        arg_error(&format!("Invalid property: {}", arg));
                     }
                 }
             }
@@ -97,13 +97,10 @@ fn read_args() -> (Option<usize>, Option<usize>, PropertyVec) {
 
 fn validate_set_size(min_set_size: usize, max_set_size: usize) {
     if max_set_size > crate::constants::MAX_SET_SIZE {
-        arg_error(
-            format!(
-                "Invalid maximum set size - should be at most {}",
-                crate::constants::MAX_SET_SIZE
-            )
-            .as_str(),
-        );
+        arg_error(&format!(
+            "Invalid maximum set size - should be at most {}",
+            crate::constants::MAX_SET_SIZE
+        ));
     }
 
     if min_set_size > max_set_size {
