@@ -21,7 +21,7 @@ pub fn get_input() -> (usize, usize, PropertyVec) {
     (min_size, max_size, properties)
 }
 
-fn read_args() -> (Option<usize>, Option<usize>, Vec<usize>) {
+fn read_args() -> (Option<usize>, Option<usize>, PropertyVec) {
     let mut min_set_size: Option<usize> = None;
     let mut max_set_size: Option<usize> = None;
 
@@ -120,6 +120,7 @@ fn arg_error(error: &str) -> ! {
     let program_name = std::env::args().next().unwrap_or("program".to_string());
 
     eprintln!("ERROR: {}", error);
+
     eprintln!(
         "Usage: {} [--min <min_size>] [--max <max_size>] [--properties <property1> <property2> ...]",
         program_name
@@ -138,8 +139,9 @@ fn arg_error(error: &str) -> ! {
         crate::constants::MAX_SET_SIZE
     );
     eprintln!(
-        "Valid properties are: {:?}",
-        crate::constants::PROPERTY_NAMES
+        "Valid properties are: {}",
+        crate::constants::PROPERTY_NAMES.join(", ")
     );
+
     std::process::exit(1);
 }
