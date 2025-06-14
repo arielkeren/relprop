@@ -36,7 +36,7 @@
 
 ## Mathematical Background
 
-A **binary relation** on a set $S$ of finite cardinality (size) $n$ is a subset of the _cartesian multiplication_ of $S$ with itself. There are $2$^$n^2$ possible binary relations on $S$. Each relation can be represented as an $n$-by-$n$ Boolean matrix. In this project, for faster checking, bitwise operations are used, along with each relation being represented as a fixed array of unsigned integers.
+A **binary relation** on a set $S$ of finite cardinality (size) $n$ is a subset of the _cartesian multiplication_ of $S$ with itself. There are $2$ ^ $n^2$ possible binary relations on $S$. Each relation can be represented as an $n$ by $n$ Boolean matrix. In this project, for faster checking, bitwise operations are used, along with each relation being represented as a fixed array of unsigned integers.
 
 **RelProp** systematically enumerates all such relations for a given $n$, and checks which properties each relation satisfies.
 
