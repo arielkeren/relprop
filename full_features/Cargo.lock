@@ -54,7 +54,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "relations"
+name = "relprop"
 version = "0.1.0"
 dependencies = [
  "rayon",

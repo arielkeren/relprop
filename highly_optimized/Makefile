@@ -5,7 +5,7 @@ INC_DIR = include
 OBJ_DIR = obj
 SRC = $(wildcard $(SRC_DIR)/*.c)
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-TARGET = relations
+TARGET = relprop
 
 all: $(TARGET)
 

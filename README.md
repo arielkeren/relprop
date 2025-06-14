@@ -73,18 +73,18 @@ A **binary relation** on a set $S$ of finite cardinality (size) $n$ is a subset 
 ```sh
 cd highly_optimized
 make
-./relations --min 2 --max 5
+./relprop [--min <min_size>] [--max <max_size>]
 # Or
-./relations -m 2 -M 5
+./relprop [-m <min_size>] [-M <max_size>]
 ```
 
 ### **Rust Version (Full Features)**
 
 ```sh
 cd full_features
-cargo run --release -- --min 2 --max 5 --properties symmetry antisymmetry transitivity
+cargo run --release -- [--min <min_size>] [--max <max_size>] [--properties <property1> <property2> ...]
 # Or
-cargo run --release -- -m 2 -M 5 -p symmetry antisymmetry transitivity
+cargo run --release -- [-m <min_size>] [-M <max_size>] [-p <property1> <property2> ...]
 ```
 
 ### **Go Tests (Testing CSV)**
