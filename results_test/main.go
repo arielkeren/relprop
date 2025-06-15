@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"results_test/pkg/validation"
 )
 
 func main() {
 	propToCount, err := validation.ReadCSV()
 	if err != nil {
-		fmt.Println("Error reading CSV:", err)
+		fmt.Fprintln(os.Stderr, "Error reading CSV:", err)
 		return
 	}
 

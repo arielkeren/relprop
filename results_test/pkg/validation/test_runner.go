@@ -2,7 +2,7 @@ package validation
 
 import "fmt"
 
-func PrintSummary(cannotCheck, correct, incorrect int) {
+func PrintSummary(cannotCheck, correct, incorrect uint16) {
 	fmt.Println("\n---- Results Summary ----")
 	fmt.Println("Correct:", correct)
 	fmt.Println("Incorrect:", incorrect)
@@ -17,10 +17,10 @@ func PrintSummary(cannotCheck, correct, incorrect int) {
 	fmt.Println("-------------------------")
 }
 
-func RunTests(props map[string][]uint64) (int, int, int) {
-	cannotCheck := 0
-	correct := 0
-	incorrect := 0
+func RunTests(props map[string][]uint64) (uint16, uint16, uint16) {
+	cannotCheck := uint16(0)
+	correct := uint16(0)
+	incorrect := uint16(0)
 
 	for prop, vals := range props {
 		for setSize, data := range vals {
