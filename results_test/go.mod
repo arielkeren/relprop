@@ -1,3 +1,3 @@
-module results_test
+module relprop
 
 go 1.24.4
