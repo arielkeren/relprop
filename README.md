@@ -73,6 +73,7 @@ A **binary relation** on a set $S$ of finite cardinality (size) $n$ is a subset 
 ```sh
 cd highly_optimized
 make
+
 ./relprop [--min <min_size>] [--max <max_size>]
 # Or
 ./relprop [-m <min_size>] [-M <max_size>]
@@ -82,9 +83,17 @@ make
 
 ```sh
 cd full_features
-cargo run --release -- [--min <min_size>] [--max <max_size>] [--properties <property1> <property2> ...]
+
+cargo run -- [--min <min_size>] [--max <max_size>] [--properties <property1> <property2> ...]
 # Or
-cargo run --release -- [-m <min_size>] [-M <max_size>] [-p <property1> <property2> ...]
+cargo run -- [-m <min_size>] [-M <max_size>] [-p <property1> <property2> ...]
+
+# For maximum optimization, run:
+
+# --- Windows Powershell ---
+$env:RUSTFLAGS="-C target-cpu=native"; cargo run --release -- [-m <min_size>] [-M <max_size>] [-p <property1> <property2> ...]
+# --- Unix-like Shells ---
+RUSTFLAGS="-C target-cpu=native" cargo run --release -- [-m <min_size>] [-M <max_size>] [-p <property1> <property2> ...]
 ```
 
 ### **Go Tests (Testing CSV)**
